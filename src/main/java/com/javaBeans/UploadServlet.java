@@ -6,11 +6,7 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -121,7 +117,7 @@ public class UploadServlet extends HttpServlet {
                     System.out.println(file.length()/(1024.0*1024));
                     if (file.length()/(1024.0*1024)>20)
                     {
-                        request.setAttribute("suggestion","文件大小不能超过20MB哦");
+                        request.setAttribute("suggestion","The size of file can not exceed 20MB");
                         request.getRequestDispatcher("PostArticle.jsp").forward(request, response);
                     }
                     else {
@@ -138,12 +134,21 @@ public class UploadServlet extends HttpServlet {
                             String ul = "jdbc:mysql://47.115.56.157:3306/oo?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8";
 
                             con = DriverManager.getConnection(ul, u, password);
+                            String sql0="select sid from subject where subject=?";
+                            ps = con.prepareStatement(sql0);
+                            ps.setString(1,subject);
+                            ResultSet resultSet = ps.executeQuery();
+                            int sid=0;
+                            if (resultSet.next())
+                            {
+                                 sid = resultSet.getInt("sid");
+                            }
 
-                            String sql = "insert into article(subject, title, highlight, abstracts, author, time, filename, path,hide) values (?,?,?,?,?,?,?,?,?)";
+                            String sql = "insert into article(sid, title, highlight, abstracts, author, time, filename, path,hide) values (?,?,?,?,?,?,?,?,?)";
 
                             ps = con.prepareStatement(sql);
 
-                            ps.setString(1, subject);
+                            ps.setInt(1, sid);
                             ps.setString(2, title);
                             ps.setString(3, highlights);
                             ps.setString(4, abstracts);
@@ -193,7 +198,7 @@ public class UploadServlet extends HttpServlet {
 //                    request.setAttribute("title", title);
 //                    request.setAttribute("highlights", highlights);
 //                    request.setAttribute("abstracts", abstracts);
-                    request.setAttribute("suggestion","Only PDF files are supported.And the size of file can not exceed 20MB");
+                    request.setAttribute("suggestion","Unsupported file format!.\nOnly PDF files are supported.");
                     request.getRequestDispatcher("PostArticle.jsp").forward(request, response);
 
                 }

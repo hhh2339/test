@@ -62,14 +62,14 @@ public class AdministorController extends HttpServlet {
             request.getRequestDispatcher("AddSubject.jsp").forward(request, response);
         }
         if (page.equals("addSubject")) {
-            String sname = request.getParameter("sname");
-            Subject subject = new Subject();
+            String subject = request.getParameter("subject");
+            Subject sub = new Subject();
             Timestamp time = new Timestamp(System.currentTimeMillis());
-            subject.setSdate(time);
-            subject.setSname(sname);
+            sub.setSdate(time);
+            sub.setSubject(subject);
             DB db = new DB();
             try {
-                db.addSubject(subject);
+                db.addSubject(sub);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -78,10 +78,10 @@ public class AdministorController extends HttpServlet {
 
         }
         if (page.equals("edit")) {
-            String sname = request.getParameter("sname");
+            String subject = request.getParameter("subject");
 
 
-            request.setAttribute("sname", sname);
+            request.setAttribute("subject", subject);
 
             request.getRequestDispatcher("AdministratorEdit.jsp").forward(request, response);
         }
@@ -104,11 +104,11 @@ public class AdministorController extends HttpServlet {
             request.getRequestDispatcher("AdministratorHome.jsp").forward(request, response);
         }
         if (page.equals("edit-form")) {
-            String oldsname = request.getParameter("oldsname");
+            String oldsubject = request.getParameter("oldsubject");
 
-            String newsname = request.getParameter("newsname");
-            System.out.println("oldsname"+oldsname);
-            System.out.println("newsname"+newsname);
+            String newsubject = request.getParameter("newsubject");
+            System.out.println("oldsubject"+oldsubject);
+            System.out.println("newsubject"+newsubject);
 
             Timestamp time = new Timestamp(System.currentTimeMillis());
 
@@ -117,7 +117,7 @@ public class AdministorController extends HttpServlet {
             boolean checkstatus = false;
 
             try {
-                checkstatus = db.checksubject(newsname);
+                checkstatus = db.checksubject(newsubject);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -125,21 +125,21 @@ public class AdministorController extends HttpServlet {
             if (checkstatus) {
                 //JOptionPane.showMessageDialog(null, "com.javaBean.Article Title is already exist please try anotherone ", "Info", JOptionPane.INFORMATION_MESSAGE);
 
-                request.setAttribute("sname", oldsname);
+                request.setAttribute("subject", oldsubject);
 
                 request.getRequestDispatcher("AdministratorEdit.jsp").forward(request, response);
             } else {
 
 
-                if (newsname.length() > 30) {
+                if (newsubject.length() > 30) {
                     //JOptionPane.showMessageDialog(null, "you have typed more than 100 letters in Highlights", "Info", JOptionPane.INFORMATION_MESSAGE);
                     request.getSession().setAttribute("info", "subject name长度不能超过30个字符");
-                    request.setAttribute("sname", oldsname);
+                    request.setAttribute("subject", oldsubject);
                     request.getRequestDispatcher("AuthorEdit.jsp").forward(request, response);
                 } else {
                     Subject s = new Subject();
-                    s.setOldSname(oldsname);
-                    s.setSname(newsname);
+                    s.setOldsubject(oldsubject);
+                    s.setSubject(newsubject);
                     s.setSdate(time);
 
 

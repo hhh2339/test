@@ -58,13 +58,13 @@ public class DB {
 	{
 		connect();
 
-		String sql = "update subject set sname=?, sdate=? where sname=?";
+		String sql = "update subject set subject=?, sdate=? where subject=?";
 
 		PreparedStatement ps = con.prepareStatement(sql);
 
-		ps.setString(1, s.getSname());
+		ps.setString(1, s.getSubject());
 		ps.setTimestamp(2,s.sdate);
-		ps.setString(3, s.getOldSname());
+		ps.setString(3, s.getOldsubject());
 
 		ps.executeUpdate();
 
@@ -161,12 +161,12 @@ public class DB {
 	{
 		connect();
 
-		String sql = "insert into subject(sid,sname,sdate) values(?,?,?)";
+		String sql = "insert into subject(sid,subject,sdate) values(?,?,?)";
 
 		PreparedStatement ps = con.prepareStatement(sql);
 
 		ps.setInt(1,0);
-		ps.setString(2, a.getSname());
+		ps.setString(2, a.getSubject());
 		ps.setTimestamp(3, a.getSdate());
 		ps.executeUpdate();
 
@@ -293,7 +293,7 @@ public class DB {
 		boolean result = false;
 		int i = 0;
 
-		String sql = "select * from article where title=?";
+		String sql = "select * from article a , subject s where a.sid=s.sid  and title=?";
 
 		PreparedStatement ps = con.prepareStatement(sql);
 
@@ -320,7 +320,7 @@ public class DB {
 		boolean result = false;
 //		int i = 0;
 
-		String sql = "select * from subject where sname=?";
+		String sql = "select * from subject where subject=?";
 
 		PreparedStatement ps = con.prepareStatement(sql);
 
@@ -354,9 +354,9 @@ public class DB {
 
 
 
-		String sql = "insert into user_ip(ip, title, prefer) values(?, ?, ?)";
-		String sql2 = "select * from user_ip where ip=? and title=?";
-		String sql3 = "update user_ip set prefer=? where ip=? and title=?";
+		String sql = "insert into love_article(ip, title, prefer) values(?, ?, ?)";
+		String sql2 = "select * from love_article where ip=? and title=?";
+		String sql3 = "update love_article set prefer=? where ip=? and title=?";
 
 		PreparedStatement ps2 = con.prepareStatement(sql2);
 		ps2.setString(1, ip);
@@ -414,9 +414,9 @@ public class DB {
 
 
 
-		String sql = "insert into comments_ip(ip, id, prefer) values(?, ?, ?)";
-		String sql2 = "select * from comments_ip where ip=? and id=?";
-		String sql3 = "update comments_ip set prefer=? where ip=? and id=?";
+		String sql = "insert into love_comment(ip, cid, prefer) values(?, ?, ?)";
+		String sql2 = "select * from love_comment where ip=? and cid=?";
+		String sql3 = "update love_comment set prefer=? where ip=? and cid=?";
 
 		PreparedStatement ps2 = con.prepareStatement(sql2);
 		ps2.setString(1, ip);
@@ -424,7 +424,7 @@ public class DB {
 
 		ResultSet rs = ps2.executeQuery();
 
-		while(rs.next())
+		if(rs.next())
 		{
 			i = 1;
 		}

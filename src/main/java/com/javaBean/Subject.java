@@ -4,16 +4,16 @@ import java.sql.Timestamp;
 
 public class Subject {
      public int sid;
-     public String sname;
+     public String subject;
      public Timestamp sdate;
-     public String oldSname;
+     public String oldsubject;
 
-    public String getOldSname() {
-        return oldSname;
+    public String getOldsubject() {
+        return oldsubject;
     }
 
-    public void setOldSname(String oldSname) {
-        this.oldSname = oldSname;
+    public void setOldsubject(String oldsubject) {
+        this.oldsubject = oldsubject;
     }
 
     public int getSid() {
@@ -24,12 +24,12 @@ public class Subject {
         this.sid = sid;
     }
 
-    public String getSname() {
-        return sname;
+    public String getSubject() {
+        return subject;
     }
 
-    public void setSname(String sname) {
-        this.sname = sname;
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public Timestamp getSdate() {
